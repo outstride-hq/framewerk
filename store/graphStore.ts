@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { LayoutNode, EdgeData, Discipline } from "@/lib/graph/types";
+import type { LayoutNode, EdgeData, Discipline, CouncilResponse } from "@/lib/graph/types";
 import type { OracleResult, OracleMessage } from "@/lib/graph/types";
 import { EDGE_PARTICLE_COLORS } from "@/lib/constants";
 
@@ -66,6 +66,12 @@ interface GraphState {
   // API key (user-provided, stored in localStorage)
   apiKey: string | null;
 
+  // Council mode
+  councilMode: boolean;
+  councilLoading: boolean;
+  councilResults: CouncilResponse | null;
+  councilActivatedNodes: Set<string>;
+
   // Actions
   setAutoRotate: (autoRotate: boolean) => void;
   setApiKey: (key: string | null) => void;
@@ -100,6 +106,13 @@ interface GraphState {
   enterSynapseMode: (nodeId: string) => void;
   exitSynapseMode: () => void;
   synapseFlyTo: (nodeId: string) => void;
+
+  // Council
+  setCouncilMode: (mode: boolean) => void;
+  setCouncilLoading: (loading: boolean) => void;
+  setCouncilResults: (results: CouncilResponse | null) => void;
+  addCouncilActivatedNode: (nodeId: string) => void;
+  clearCouncil: () => void;
 }
 
 export const useGraphStore = create<GraphState>((set) => ({
@@ -151,6 +164,11 @@ export const useGraphStore = create<GraphState>((set) => ({
   autoRotate: true,
 
   apiKey: null,
+
+  councilMode: false,
+  councilLoading: false,
+  councilResults: null,
+  councilActivatedNodes: new Set(),
 
   setAutoRotate: (autoRotate) => set({ autoRotate }),
   setApiKey: (key) => {
@@ -324,5 +342,22 @@ export const useGraphStore = create<GraphState>((set) => ({
         if (history.length > 50) history.shift();
       }
       return { synapseFocusId: nodeId, selectedNodeId: nodeId, navigationHistory: history };
+    }),
+
+  setCouncilMode: (councilMode) => set({ councilMode }),
+  setCouncilLoading: (councilLoading) => set({ councilLoading }),
+  setCouncilResults: (councilResults) => set({ councilResults }),
+  addCouncilActivatedNode: (nodeId) =>
+    set((state) => {
+      const next = new Set(state.councilActivatedNodes);
+      next.add(nodeId);
+      return { councilActivatedNodes: next };
+    }),
+  clearCouncil: () =>
+    set({
+      councilMode: false,
+      councilLoading: false,
+      councilResults: null,
+      councilActivatedNodes: new Set(),
     }),
 }));

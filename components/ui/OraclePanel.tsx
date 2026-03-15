@@ -7,6 +7,7 @@ import { DISCIPLINE_COLORS } from "@/lib/constants";
 import type { Discipline, OracleResult, OracleRole } from "@/lib/graph/types";
 import { playFireSound } from "@/lib/audio";
 import { ApiKeyModal } from "@/components/ui/ApiKeyModal";
+import { CouncilTab } from "@/components/ui/CouncilTab";
 
 const ROLE_CONFIG: Record<OracleRole, { label: string; description: string; color: string; icon: string }> = {
   supporting: { label: "Supporting", description: "Models that reinforce your direction", color: "#5DBF6E", icon: "+" },
@@ -15,6 +16,7 @@ const ROLE_CONFIG: Record<OracleRole, { label: string; description: string; colo
 };
 
 export function OraclePanel() {
+  const [activeTab, setActiveTab] = useState<"oracle" | "council">("oracle");
   const [query, setQuery] = useState("");
   const [followUpQuery, setFollowUpQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -185,6 +187,33 @@ export function OraclePanel() {
           border: "1px solid rgba(60, 90, 110, 0.12)",
         }}
       >
+        {/* ── Tab Switcher ── */}
+        <div className="flex-shrink-0 px-10 pt-5 pb-0 flex gap-6 border-b" style={{ borderBottomColor: "#1A2830" }}>
+          <button
+            onClick={() => setActiveTab("oracle")}
+            className="pb-3 font-mono text-[10px] tracking-[0.1em] uppercase transition-colors"
+            style={{
+              color: activeTab === "oracle" ? "#E8A030" : "#5A7A8A",
+              borderBottom: activeTab === "oracle" ? "2px solid #E8A030" : "none",
+            }}
+          >
+            Oracle
+          </button>
+          <button
+            onClick={() => setActiveTab("council")}
+            className="pb-3 font-mono text-[10px] tracking-[0.1em] uppercase transition-colors"
+            style={{
+              color: activeTab === "council" ? "#8CB4CC" : "#5A7A8A",
+              borderBottom: activeTab === "council" ? "2px solid #8CB4CC" : "none",
+            }}
+          >
+            Council
+          </button>
+        </div>
+
+        {/* ── Tab Content: Oracle ── */}
+        {activeTab === "oracle" && (
+        <>
         {/* ── Scrollable content ── */}
         <div className="flex-1 overflow-y-auto">
 
@@ -449,6 +478,13 @@ export function OraclePanel() {
         </div>
 
         <ApiKeyModal open={keyModalOpen} onClose={() => setKeyModalOpen(false)} />
+        </>
+        )}
+
+        {/* ── Tab Content: Council ── */}
+        {activeTab === "council" && (
+        <CouncilTab />
+        )}
       </div>
     );
   }
