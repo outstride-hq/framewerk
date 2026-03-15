@@ -65,3 +65,70 @@ export interface OracleMessage {
   role: "user" | "assistant";
   content: string;
 }
+
+// --- Reasoning Graph (unified node/edge schema for deliberation) ---
+
+export type NodeType =
+  | "framework"
+  | "persona"
+  | "debate_type"
+  | "problem_type"
+  | "principle"
+  | "argument_pattern"
+  | "decision_tool";
+
+export type ReasoningEdgeType =
+  | "useful_for"
+  | "balances"
+  | "challenges"
+  | "supports"
+  | "similar_to"
+  | "works_with"
+  | "recommended_for"
+  | "avoid_for"
+  | "requires";
+
+export interface ReasoningNode {
+  id: string;
+  type: NodeType;
+  name: string;
+  description: string;
+  tags: string[];
+  metadata?: Record<string, unknown>;
+  // Persona-specific (when type === "persona")
+  worldview?: string;
+  biases?: string[];
+  preferred_frameworks?: string[];
+  challenges?: string[];
+  // Debate-type-specific (when type === "debate_type")
+  participants?: number;
+  structure?: string[];
+}
+
+export interface ReasoningEdge {
+  from: string;
+  to: string;
+  type: ReasoningEdgeType;
+  weight?: number;
+  metadata?: Record<string, unknown>;
+}
+
+/** Rich persona shape (subset of ReasoningNode when type === "persona") */
+export interface Persona {
+  id: string;
+  name: string;
+  description: string;
+  worldview: string;
+  biases: string[];
+  preferred_frameworks?: string[];
+  challenges?: string[];
+}
+
+/** Debate type shape (subset of ReasoningNode when type === "debate_type") */
+export interface DebateType {
+  id: string;
+  name: string;
+  description: string;
+  participants: number;
+  structure: string[];
+}
