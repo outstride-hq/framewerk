@@ -13,6 +13,11 @@ export declare const toolDefinitions: ({
             edge_type?: undefined;
             situation?: undefined;
             api_key?: undefined;
+            limit?: undefined;
+            steps?: undefined;
+            direction?: undefined;
+            edge_types?: undefined;
+            problem?: undefined;
         };
         required: string[];
     };
@@ -31,6 +36,11 @@ export declare const toolDefinitions: ({
             edge_type?: undefined;
             situation?: undefined;
             api_key?: undefined;
+            limit?: undefined;
+            steps?: undefined;
+            direction?: undefined;
+            edge_types?: undefined;
+            problem?: undefined;
         };
         required: string[];
     };
@@ -46,6 +56,11 @@ export declare const toolDefinitions: ({
             edge_type?: undefined;
             situation?: undefined;
             api_key?: undefined;
+            limit?: undefined;
+            steps?: undefined;
+            direction?: undefined;
+            edge_types?: undefined;
+            problem?: undefined;
         };
         required?: undefined;
     };
@@ -64,6 +79,11 @@ export declare const toolDefinitions: ({
             edge_type?: undefined;
             situation?: undefined;
             api_key?: undefined;
+            limit?: undefined;
+            steps?: undefined;
+            direction?: undefined;
+            edge_types?: undefined;
+            problem?: undefined;
         };
         required: string[];
     };
@@ -85,6 +105,11 @@ export declare const toolDefinitions: ({
             discipline?: undefined;
             situation?: undefined;
             api_key?: undefined;
+            limit?: undefined;
+            steps?: undefined;
+            direction?: undefined;
+            edge_types?: undefined;
+            problem?: undefined;
         };
         required: string[];
     };
@@ -106,6 +131,92 @@ export declare const toolDefinitions: ({
             id?: undefined;
             discipline?: undefined;
             edge_type?: undefined;
+            limit?: undefined;
+            steps?: undefined;
+            direction?: undefined;
+            edge_types?: undefined;
+            problem?: undefined;
+        };
+        required: string[];
+    };
+} | {
+    name: string;
+    description: string;
+    inputSchema: {
+        type: "object";
+        properties: {
+            query: {
+                type: string;
+                description: string;
+            };
+            limit: {
+                type: string;
+                description: string;
+            };
+            id?: undefined;
+            discipline?: undefined;
+            edge_type?: undefined;
+            situation?: undefined;
+            api_key?: undefined;
+            steps?: undefined;
+            direction?: undefined;
+            edge_types?: undefined;
+            problem?: undefined;
+        };
+        required: string[];
+    };
+} | {
+    name: string;
+    description: string;
+    inputSchema: {
+        type: "object";
+        properties: {
+            id: {
+                type: string;
+                description: string;
+            };
+            steps: {
+                type: string;
+                description: string;
+            };
+            direction: {
+                type: string;
+                description: string;
+            };
+            edge_types: {
+                type: string;
+                description: string;
+            };
+            query?: undefined;
+            discipline?: undefined;
+            edge_type?: undefined;
+            situation?: undefined;
+            api_key?: undefined;
+            limit?: undefined;
+            problem?: undefined;
+        };
+        required: string[];
+    };
+} | {
+    name: string;
+    description: string;
+    inputSchema: {
+        type: "object";
+        properties: {
+            problem: {
+                type: string;
+                description: string;
+            };
+            query?: undefined;
+            id?: undefined;
+            discipline?: undefined;
+            edge_type?: undefined;
+            situation?: undefined;
+            api_key?: undefined;
+            limit?: undefined;
+            steps?: undefined;
+            direction?: undefined;
+            edge_types?: undefined;
         };
         required: string[];
     };

@@ -2,7 +2,10 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { initReasoningGraph } from "./reasoning-graph/index.js";
 import { toolDefinitions, handleTool } from "./tools.js";
+
+initReasoningGraph();
 
 const server = new McpServer({
   name: "framewerk",

@@ -8,6 +8,13 @@ import {
   EDGE_TYPES,
 } from "./data.js";
 import { queryOracle } from "./oracle.js";
+import {
+  searchNodes,
+  getNode as getReasoningNode,
+  traverse,
+  designCouncil,
+} from "./reasoning-graph/index.js";
+import type { ReasoningEdgeType } from "./reasoning-graph/types.js";
 
 // --- Tool definitions (JSON Schema for MCP) ---
 
@@ -119,6 +126,83 @@ export const toolDefinitions = [
         },
       },
       required: ["situation", "api_key"],
+    },
+  },
+  {
+    name: "search_nodes",
+    description:
+      "Query the reasoning graph by name, description, or tags. Returns matching nodes (frameworks, personas, debate types, problem types, etc.) ranked by relevance.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        query: {
+          type: "string",
+          description: "Search query to match against node names, descriptions, and tags",
+        },
+        limit: {
+          type: "number",
+          description: "Maximum number of results (default 20)",
+        },
+      },
+      required: ["query"],
+    },
+  },
+  {
+    name: "get_node",
+    description:
+      "Get the full definition of a reasoning-graph node by ID (framework, persona, debate type, problem type, etc.).",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        id: {
+          type: "string",
+          description: "Node ID (e.g. opportunity_cost, skeptical_risk_manager, roundtable)",
+        },
+      },
+      required: ["id"],
+    },
+  },
+  {
+    name: "traverse_graph",
+    description:
+      "From a node ID, return connected reasoning tools (neighbors) with optional multi-hop traversal. Filter by edge type or node type.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        id: {
+          type: "string",
+          description: "Starting node ID",
+        },
+        steps: {
+          type: "number",
+          description: "Number of hops (default 1)",
+        },
+        direction: {
+          type: "string",
+          description: "out, in, or both (default both)",
+        },
+        edge_types: {
+          type: "string",
+          description:
+            "Comma-separated edge types to follow: useful_for, balances, challenges, supports, similar_to, works_with, recommended_for, avoid_for, requires",
+        },
+      },
+      required: ["id"],
+    },
+  },
+  {
+    name: "design_council",
+    description:
+      "Design a deliberation council for a problem: classify the problem, explore the reasoning graph, and return a balanced set of frameworks, personas, and debate type with reasoning.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        problem: {
+          type: "string",
+          description: "The problem, situation, or decision to design a council for",
+        },
+      },
+      required: ["problem"],
     },
   },
 ];
@@ -262,6 +346,85 @@ export async function handleTool(
         const message = err instanceof Error ? err.message : "Unknown error";
         return JSON.stringify({ error: `Oracle failed: ${message}` });
       }
+    }
+
+    case "search_nodes": {
+      const rq = args.query as string;
+      if (!rq) return JSON.stringify({ error: "query is required" });
+      const limit = (args.limit as number) ?? 20;
+      const nodes = searchNodes(rq, limit);
+      return JSON.stringify(
+        nodes.map((n) => ({
+          id: n.id,
+          type: n.type,
+          name: n.name,
+          description: n.description,
+          tags: n.tags,
+        })),
+        null,
+        2
+      );
+    }
+
+    case "get_node": {
+      const nid = args.id as string;
+      if (!nid) return JSON.stringify({ error: "id is required" });
+      const node = getReasoningNode(nid);
+      if (!node) return JSON.stringify({ error: `Node "${nid}" not found` });
+      return JSON.stringify(node, null, 2);
+    }
+
+    case "traverse_graph": {
+      const tid = args.id as string;
+      if (!tid) return JSON.stringify({ error: "id is required" });
+      const steps = (args.steps as number) ?? 1;
+      const direction = (args.direction as "out" | "in" | "both") ?? "both";
+      const edgeTypesStr = args.edge_types as string | undefined;
+      const validEdgeTypes = [
+        "useful_for",
+        "balances",
+        "challenges",
+        "supports",
+        "similar_to",
+        "works_with",
+        "recommended_for",
+        "avoid_for",
+        "requires",
+      ];
+      const rawTypes =
+        edgeTypesStr
+          ?.split(",")
+          .map((s) => s.trim())
+          .filter((t) => validEdgeTypes.includes(t)) ?? [];
+      const edgeTypes: ReasoningEdgeType[] | undefined =
+        rawTypes.length > 0 ? (rawTypes as ReasoningEdgeType[]) : undefined;
+      const result = traverse(tid, {
+        steps,
+        direction,
+        edgeTypes,
+      });
+      return JSON.stringify(
+        {
+          start_id: tid,
+          steps,
+          nodes: result.map((r) => ({
+            id: r.node.id,
+            type: r.node.type,
+            name: r.node.name,
+            depth: r.depth,
+            edgeType: r.edgeType || undefined,
+          })),
+        },
+        null,
+        2
+      );
+    }
+
+    case "design_council": {
+      const problem = args.problem as string;
+      if (!problem) return JSON.stringify({ error: "problem is required" });
+      const council = designCouncil(problem);
+      return JSON.stringify(council, null, 2);
     }
 
     default:
