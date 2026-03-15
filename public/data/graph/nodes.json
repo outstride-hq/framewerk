@@ -1,0 +1,143 @@
+[
+  {
+    "id": "opportunity_cost",
+    "type": "framework",
+    "name": "Opportunity Cost",
+    "description": "The value of the next best alternative that must be given up.",
+    "tags": ["decision", "tradeoff"]
+  },
+  {
+    "id": "inversion",
+    "type": "framework",
+    "name": "Inversion",
+    "description": "Consider the opposite: what would cause failure, then avoid those paths.",
+    "tags": ["decision", "risk", "planning"]
+  },
+  {
+    "id": "regret_minimization",
+    "type": "framework",
+    "name": "Regret Minimization",
+    "description": "Choose the option you would least regret when looking back from old age.",
+    "tags": ["decision", "long-term", "values"]
+  },
+  {
+    "id": "premortem",
+    "type": "framework",
+    "name": "Premortem",
+    "description": "Imagine the project has failed; work backward to identify causes and mitigate them.",
+    "tags": ["risk", "planning", "failure"]
+  },
+  {
+    "id": "second_order_thinking",
+    "type": "framework",
+    "name": "Second-Order Thinking",
+    "description": "Consider the consequences of the consequences of your decisions.",
+    "tags": ["decision", "systems", "long-term"]
+  },
+  {
+    "id": "skeptical_risk_manager",
+    "type": "persona",
+    "name": "Skeptical Risk Manager",
+    "description": "Focuses on downside protection and failure modes.",
+    "tags": ["risk", "caution", "challenging"],
+    "worldview": "Assume things can go wrong; plan for failure modes first.",
+    "biases": ["risk", "uncertainty"],
+    "preferred_frameworks": ["inversion", "premortem"],
+    "challenges": ["optimistic_builder"]
+  },
+  {
+    "id": "optimistic_builder",
+    "type": "persona",
+    "name": "Optimistic Builder",
+    "description": "Emphasizes upside, growth, and execution.",
+    "tags": ["growth", "execution", "supporting"],
+    "worldview": "Focus on what could go right and how to get there.",
+    "biases": ["optimism", "action"],
+    "preferred_frameworks": ["regret_minimization", "second_order_thinking"],
+    "challenges": ["skeptical_risk_manager"]
+  },
+  {
+    "id": "practical_operator",
+    "type": "persona",
+    "name": "Practical Operator",
+    "description": "Grounds decisions in constraints, resources, and feasibility.",
+    "tags": ["practical", "resources", "process"],
+    "worldview": "What can we actually do with what we have?",
+    "biases": ["pragmatism", "constraints"],
+    "preferred_frameworks": ["opportunity_cost", "inversion"],
+    "challenges": []
+  },
+  {
+    "id": "roundtable",
+    "type": "debate_type",
+    "name": "Roundtable",
+    "description": "Each perspective speaks in turn; no formal opposition, emphasis on synthesis.",
+    "tags": ["collaborative", "balanced", "synthesis"],
+    "participants": 3,
+    "structure": ["opening", "round_1", "round_2", "synthesis"]
+  },
+  {
+    "id": "red_team_blue_team",
+    "type": "debate_type",
+    "name": "Red Team / Blue Team",
+    "description": "Structured opposition: one side argues for, one against; stress-test the decision.",
+    "tags": ["adversarial", "stress-test", "challenge"],
+    "participants": 2,
+    "structure": ["position_blue", "position_red", "rebuttal_blue", "rebuttal_red", "synthesis"]
+  },
+  {
+    "id": "steelman_debate",
+    "type": "debate_type",
+    "name": "Steelman Debate",
+    "description": "Each side must argue the strongest version of the other's position before arguing their own.",
+    "tags": ["steelman", "empathy", "rigor"],
+    "participants": 2,
+    "structure": ["steelman_opponent", "own_position", "rebuttal", "synthesis"]
+  },
+  {
+    "id": "inner_council",
+    "type": "debate_type",
+    "name": "Inner Council",
+    "description": "Multiple internal voices (personas) deliberate as a council; single decision-maker hears all.",
+    "tags": ["council", "personas", "internal"],
+    "participants": 3,
+    "structure": ["opening", "perspective_1", "perspective_2", "perspective_3", "integration"]
+  },
+  {
+    "id": "scenario_planning",
+    "type": "debate_type",
+    "name": "Scenario Planning",
+    "description": "Explore multiple futures; each scenario gets argued and stress-tested.",
+    "tags": ["scenarios", "futures", "uncertainty"],
+    "participants": 3,
+    "structure": ["scenario_1", "scenario_2", "scenario_3", "comparison", "implications"]
+  },
+  {
+    "id": "career_decision",
+    "type": "problem_type",
+    "name": "Career Decision",
+    "description": "Choices about role, path, or major professional transitions.",
+    "tags": ["career", "transition", "long-term", "tradeoff"]
+  },
+  {
+    "id": "resource_allocation",
+    "type": "problem_type",
+    "name": "Resource Allocation",
+    "description": "How to allocate limited time, money, or attention across options.",
+    "tags": ["resources", "tradeoff", "priority"]
+  },
+  {
+    "id": "strategy",
+    "type": "problem_type",
+    "name": "Strategy",
+    "description": "Direction, positioning, or multi-step plans under uncertainty.",
+    "tags": ["strategy", "planning", "uncertainty", "long-term"]
+  },
+  {
+    "id": "risk_assessment",
+    "type": "problem_type",
+    "name": "Risk Assessment",
+    "description": "Evaluating downside, failure modes, and mitigation.",
+    "tags": ["risk", "failure", "mitigation"]
+  }
+]
