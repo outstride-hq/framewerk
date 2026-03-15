@@ -132,3 +132,20 @@ export interface DebateType {
   participants: number;
   structure: string[];
 }
+
+// ─── Council (Structured Debate) ───
+
+export interface CouncilPersonaResult {
+  persona: string;
+  personaId: string;
+  stance: string;
+  argument: string;
+  models: Array<{ id: string; name: string; relevance: string }>;
+}
+
+export interface CouncilResponse {
+  question: string;
+  debateType: string;
+  debate: CouncilPersonaResult[];
+  synthesis: string;
+}
